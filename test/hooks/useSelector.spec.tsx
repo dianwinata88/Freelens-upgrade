@@ -45,7 +45,7 @@ function ProviderMock<A extends Action<any> = AnyAction, S = unknown>({
   )
 }
 
-const IS_REACT_18 = React.version.startsWith('18')
+const IS_REACT_18_OR_NEWER = Number.parseInt(React.version, 10) >= 18
 
 describe('React', () => {
   describe('hooks', () => {
@@ -722,7 +722,7 @@ describe('React', () => {
           // although I can't imagine why, and if I remove the `useSelector` calls both tests drop to ~50ms.
           // So, we'll modify our expectations here depending on whether this is an 18 or 17 compat test,
           // and give some buffer time to allow for variations in test machines.
-          const expectedMaxUnmountTime = IS_REACT_18 ? 500 : 7000
+          const expectedMaxUnmountTime = IS_REACT_18_OR_NEWER ? 500 : 7000
           expect(elapsedTime).toBeLessThan(expectedMaxUnmountTime)
         })
 

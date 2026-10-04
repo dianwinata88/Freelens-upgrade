@@ -808,9 +808,9 @@ function testRef() {
   ;<ConnectedForwardedFunctionalComponent
     ref={modernRef}
   ></ConnectedForwardedFunctionalComponent>
-  // Legacy string refs are deprecated but still allowed by @types/react 18.3's
-  // RefAttributes, so this type-checks (remove when @types/react drops them)
+  // Should not be able to use legacy string refs (removed in React 19 types)
   ;<ConnectedForwardedFunctionalComponent
+    // @ts-expect-error
     ref={''}
   ></ConnectedForwardedFunctionalComponent>
   // ref type should agree with type of the forwarded ref
@@ -823,7 +823,8 @@ function testRef() {
     ref={(ref: number) => {}}
   ></ConnectedForwardedFunctionalComponent>
 
-  // Should be able to use all refs including legacy string
+  // Should be able to use all refs except legacy strings
+  // (string refs were removed in React 19 types)
   const classLegacyRef: React.LegacyRef<ClassComponent> | undefined = undefined
   ;<ConnectedClassComponent ref={classLegacyRef}></ConnectedClassComponent>
   ;<ConnectedClassComponent
@@ -832,6 +833,7 @@ function testRef() {
   ;<ConnectedClassComponent
     ref={(ref: ClassComponent) => {}}
   ></ConnectedClassComponent>
+  // @ts-expect-error
   ;<ConnectedClassComponent ref={''}></ConnectedClassComponent>
   // ref type should be the typeof the wrapped component
   ;<ConnectedClassComponent

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, no-inner-declarations */
 import { Component, ReactElement } from 'react'
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import {
   configureStore,
   createSlice,
@@ -99,11 +99,10 @@ class App extends Component<any, any> {
 
 const targetEl = document.getElementById('root')
 
-ReactDOM.render(
+createRoot(targetEl!).render(
   <Provider store={store}>
     <App />
-  </Provider>,
-  targetEl
+  </Provider>
 )
 
 declare var store: Store<TodoState>
@@ -129,11 +128,10 @@ type AddTodoAction = ReturnType<typeof addTodo>
 declare var todoActionCreators: { [type: string]: (...args: any[]) => any }
 declare var counterActionCreators: { [type: string]: (...args: any[]) => any }
 
-ReactDOM.render(
+createRoot(document.body).render(
   <Provider store={store}>
     <MyRootComponent />
-  </Provider>,
-  document.body
+  </Provider>
 )
 
 // Inject just dispatch and don't listen to store
@@ -271,13 +269,11 @@ function HelloMessage(props: HelloMessageProps) {
   return <div>Hello {props.name}</div>
 }
 let ConnectedHelloMessage = connect()(HelloMessage)
-ReactDOM.render(
-  <HelloMessage name="Sebastian" />,
-  document.getElementById('content')
+createRoot(document.getElementById('content')!).render(
+  <HelloMessage name="Sebastian" />
 )
-ReactDOM.render(
-  <ConnectedHelloMessage name="Sebastian" />,
-  document.getElementById('content')
+createRoot(document.getElementById('content')!).render(
+  <ConnectedHelloMessage name="Sebastian" />
 )
 
 // stateless functions that uses mapStateToProps and mapDispatchToProps

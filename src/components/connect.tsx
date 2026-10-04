@@ -632,14 +632,16 @@ function connect<
       }, [didStoreComeFromProps, contextValue, subscription])
 
       // Set up refs to coordinate values between the subscription effect and the render logic
-      const lastChildProps = React.useRef<unknown>()
+      const lastChildProps = React.useRef<unknown>(undefined)
       const lastWrapperProps = React.useRef(wrapperProps)
-      const childPropsFromStoreUpdate = React.useRef<unknown>()
+      const childPropsFromStoreUpdate = React.useRef<unknown>(undefined)
       const renderIsScheduled = React.useRef(false)
       const isProcessingDispatch = React.useRef(false)
       const isMounted = React.useRef(false)
 
-      const latestSubscriptionCallbackError = React.useRef<Error>()
+      const latestSubscriptionCallbackError = React.useRef<Error | undefined>(
+        undefined
+      )
 
       useIsomorphicLayoutEffect(() => {
         isMounted.current = true

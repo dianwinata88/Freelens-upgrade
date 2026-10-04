@@ -14,8 +14,6 @@ import type {
 } from 'redux'
 import type { ReactReduxContextValue } from '../../src/index'
 
-const IS_REACT_18 = React.version.startsWith('18')
-
 describe('React', () => {
   describe('connect', () => {
     const propMapper = (prop: any): ReactNode => {
@@ -2290,7 +2288,7 @@ describe('React', () => {
         type Comp3NoDispatchType = NoDispatchType
         type Comp3OwnPropsType = {}
         interface Comp1Props extends Comp1TStatePropsType {
-          children: JSX.Element | JSX.Element[]
+          children: React.JSX.Element | React.JSX.Element[]
         }
         const Comp3 = ({ first }: Comp3TStatePropsType) => {
           c3Spy()
@@ -2317,7 +2315,7 @@ describe('React', () => {
         type Comp1NoDispatchType = NoDispatchType
         type Comp1OwnPropsType = {}
         interface Comp1Props extends Comp1TStatePropsType {
-          children: JSX.Element | JSX.Element[]
+          children: React.JSX.Element | React.JSX.Element[]
         }
         const Comp1 = ({ children, first }: Comp1Props) => {
           c1Spy()
@@ -2905,13 +2903,9 @@ describe('React', () => {
           </React.StrictMode>
         )
 
-        if (IS_REACT_18) {
-          expect(spy).not.toHaveBeenCalled()
-        } else {
-          expect(spy.mock.calls[0]?.[0]).toEqual(
-            expect.stringContaining('was not wrapped in act')
-          )
-        }
+        // With each React version correctly paired (RTL's `act` resolved
+        // against the matching react-dom), StrictMode warns on no version.
+        expect(spy).not.toHaveBeenCalled()
 
         spy.mockRestore()
       })

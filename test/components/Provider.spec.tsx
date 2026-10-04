@@ -2,12 +2,12 @@
 
 import type { Dispatch } from 'react'
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
 import { createStore } from 'redux'
 import { Provider, connect, ReactReduxContext } from '../../src/index'
 import * as rtl from '@testing-library/react'
 import type { ReactReduxContextValue } from '../../src'
 import type { Store } from 'redux'
+import { createDomRoot } from '../helpers/domRender'
 
 import '@testing-library/jest-dom/extend-expect'
 
@@ -174,7 +174,7 @@ describe('React', () => {
         count: state,
       }))
       class Inner extends Component<TStateProps> {
-        render(): JSX.Element {
+        render(): React.JSX.Element {
           return <div>{this.props.count}</div>
         }
       }
@@ -344,15 +344,19 @@ describe('React', () => {
       }
 
       const div = document.createElement('div')
-      ReactDOM.render(
-        <Provider store={store}>
-          <div />
-        </Provider>,
-        div
-      )
+      const root = createDomRoot(div)
+      rtl.act(() => {
+        root.render(
+          <Provider store={store}>
+            <div />
+          </Provider>
+        )
+      })
 
       expect(spy).toHaveBeenCalledTimes(0)
-      ReactDOM.unmountComponentAtNode(div)
+      rtl.act(() => {
+        root.unmount()
+      })
       expect(spy).toHaveBeenCalledTimes(1)
     })
 

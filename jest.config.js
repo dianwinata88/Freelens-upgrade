@@ -13,7 +13,7 @@ const tsTestFolderPath = (folderName) =>
 
 const tsStandardConfig = {
   ...defaults,
-  displayName: 'ReactDOM 18 (Shim)',
+  displayName: 'ReactDOM 19 (Shim)',
   preset: 'ts-jest',
   testMatch: NORMAL_TEST_FOLDERS.map(tsTestFolderPath),
 }
@@ -27,6 +27,12 @@ const rnConfig = {
     '^.+\\.js$': '<rootDir>/node_modules/react-native/jest/preprocessor.js',
     ...tsjPreset.transform,
   },
+  // react-native 0.64 ships a renderer built for React 17 internals
+  // (ReactCurrentOwner); it cannot run against React 18+/19.
+  moduleNameMapper: {
+    '^react$': 'react-17',
+    '^react-test-renderer$': 'react-test-renderer-17',
+  },
 }
 
 const standardReact17Config = {
@@ -35,14 +41,29 @@ const standardReact17Config = {
   moduleNameMapper: {
     '^react$': 'react-17',
     '^react-dom$': 'react-dom-17',
+    '^react-dom/(.*)$': 'react-dom-17/$1',
+    '^react-is$': 'react-is-17',
     '^react-test-renderer$': 'react-test-renderer-17',
     '^@testing-library/react$': '@testing-library/react-12',
   },
 }
 
+const standardReact18Config = {
+  ...tsStandardConfig,
+  displayName: 'ReactDOM 18',
+  moduleNameMapper: {
+    '^react$': 'react-18',
+    '^react-dom$': 'react-dom-18',
+    '^react-dom/(.*)$': 'react-dom-18/$1',
+    '^react-is$': 'react-is-18',
+    '^react-test-renderer$': 'react-test-renderer-18',
+    '^@testing-library/react$': '@testing-library/react-18',
+  },
+}
+
 const nextEntryConfig = {
   ...tsStandardConfig,
-  displayName: 'ReactDOM 18 (Next)',
+  displayName: 'ReactDOM 19 (Next)',
   moduleNameMapper: {
     '../../src/index': '<rootDir>/src/next',
   },
@@ -53,6 +74,7 @@ module.exports = {
     tsStandardConfig,
     rnConfig,
     standardReact17Config,
+    standardReact18Config,
     nextEntryConfig,
   ],
 }

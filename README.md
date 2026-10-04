@@ -1,6 +1,6 @@
-# React Redux (React 18 fork)
+# React Redux (React 19 fork)
 
-> **Fork note:** This is a fork of [react-redux](https://github.com/reduxjs/react-redux) `v8.1.3` retargeted to **React 18**. This restores the upstream React 18 layout: the `/next` entry point (native `useSyncExternalStore`) and SSR test are back, dev dependencies and peer ranges cover React `^16.8 || ^17.0 || ^18.0`, and the test suite runs against `react@18` / `@testing-library/react@13` plus the upstream React-17 alias project for cross-version coverage. `@types/react`/`@types/react-dom` are pinned to `^18` via `resolutions`.
+> **Fork note:** This is a fork of [react-redux](https://github.com/reduxjs/react-redux) `v8.1.3` retargeted to **React 19**. Dev dependencies run `react@19` / `@testing-library/react@16` with `@types/react(-dom)` pinned to `^19` via `resolutions`, and peer ranges cover `^16.8 || ^17.0 || ^18.0 || ^19.0`. React 19 removals are handled: `unstable_batchedUpdates` falls back to a no-op (all updates are batched anyway), `react-dom` `ReactDOM.render` usage in tests was replaced with `createRoot`, and `React.JSX`/`useRef(arg)` typing changes were applied. Jest runs ReactDOM 19 (Shim + `/next` entry) plus React 17 and 18 alias projects with correctly paired `react-dom`/`react-is`/`@testing-library/react` versions; the React Native project stays on React 17 since RN 0.64 can't run on newer React internals.
 
 Official React bindings for [Redux](https://github.com/reduxjs/redux).  
 Performant and flexible.

@@ -1,7 +1,16 @@
 import React, { Suspense, useState, useEffect } from 'react'
 import * as rtl from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
-import { hydrateRoot } from 'react-dom/client'
+
+// `react-dom/client` only exists for react-dom@18+; the React 17 alias
+// project resolves it to react-dom-17, so load it lazily.
+let hydrateRoot: typeof import('react-dom/client').hydrateRoot
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  hydrateRoot = require('react-dom/client').hydrateRoot
+} catch {
+  hydrateRoot = undefined as any
+}
 import { createStore, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import {
   Provider,
@@ -11,7 +20,8 @@ import {
   ConnectedProps,
 } from '../../src/index'
 
-const IS_REACT_18 = React.version.startsWith('18')
+const IS_REACT_18_OR_NEWER = Number.parseInt(React.version, 10) >= 18
+const IS_REACT_19 = Number.parseInt(React.version, 10) >= 19
 
 describe('New v8 serverState behavior', () => {
   interface State {
@@ -115,7 +125,7 @@ describe('New v8 serverState behavior', () => {
 
   const Spinner = () => <div />
 
-  if (!IS_REACT_18) {
+  if (!IS_REACT_18_OR_NEWER || !hydrateRoot) {
     it('Dummy test for React 17, ignore', () => {})
     return
   }
@@ -157,16 +167,30 @@ describe('New v8 serverState behavior', () => {
         rootDiv,
         <Provider store={clientStore}>
           <App />
-        </Provider>
+        </Provider>,
+        {
+          // React 19 reports hydration mismatches via onRecoverableError
+          // instead of console.error
+          onRecoverableError: IS_REACT_19
+            ? (error: any) => console.error(error)
+            : undefined,
+        }
       )
     })
 
     const [lastCall = []] = consoleError.mock.calls.slice(-1)
     const [errorArg] = lastCall
     expect(errorArg).toBeInstanceOf(Error)
-    expect(/There was an error while hydrating/.test(errorArg.message)).toBe(
-      true
-    )
+    if (IS_REACT_19) {
+      expect(consoleError).toHaveBeenCalledTimes(1)
+      expect(errorArg.message).toMatch(
+        /Hydration failed because the server rendered (HTML|text) didn't match the client/
+      )
+    } else {
+      expect(/There was an error while hydrating/.test(errorArg.message)).toBe(
+        true
+      )
+    }
 
     jest.resetAllMocks()
 

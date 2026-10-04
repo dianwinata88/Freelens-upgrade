@@ -808,9 +808,9 @@ function testRef() {
   ;<ConnectedForwardedFunctionalComponent
     ref={modernRef}
   ></ConnectedForwardedFunctionalComponent>
-  // Should not be able to use legacy string refs
+  // Legacy string refs are deprecated but still allowed by @types/react 18.3's
+  // RefAttributes, so this type-checks (remove when @types/react drops them)
   ;<ConnectedForwardedFunctionalComponent
-    // @ts-expect-error
     ref={''}
   ></ConnectedForwardedFunctionalComponent>
   // ref type should agree with type of the forwarded ref

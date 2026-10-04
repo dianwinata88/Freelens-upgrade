@@ -14,8 +14,6 @@ import type {
 } from 'redux'
 import type { ReactReduxContextValue } from '../../src/index'
 
-const IS_REACT_18 = React.version.startsWith('18')
-
 describe('React', () => {
   describe('connect', () => {
     const propMapper = (prop: any): ReactNode => {
@@ -2905,13 +2903,7 @@ describe('React', () => {
           </React.StrictMode>
         )
 
-        if (IS_REACT_18) {
-          expect(spy).not.toHaveBeenCalled()
-        } else {
-          expect(spy.mock.calls[0]?.[0]).toEqual(
-            expect.stringContaining('was not wrapped in act')
-          )
-        }
+        expect(spy).not.toHaveBeenCalled()
 
         spy.mockRestore()
       })

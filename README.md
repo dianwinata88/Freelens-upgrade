@@ -1,4 +1,6 @@
-# React Redux
+# React Redux (React 17 fork)
+
+> **Fork note:** This is a fork of [react-redux](https://github.com/reduxjs/react-redux) `v8.1.3` retargeted to **React 17**. The React 18-only `/next` entry point was removed, dev dependencies and peer ranges pin React `^16.8 || ^17.0`, and the test suite runs against `react@17` / `@testing-library/react@12`.
 
 Official React bindings for [Redux](https://github.com/reduxjs/redux).  
 Performant and flexible.

@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 import { createContext } from 'react'
-import { ReactReduxContextValue } from '../../src/components/Context'
+import type { ReactReduxContextValue } from '../../src/components/Context'
 import {
   createReduxContextHook,
   useReduxContext,

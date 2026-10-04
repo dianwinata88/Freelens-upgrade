@@ -15,13 +15,18 @@ export interface ReactReduxContextValue<
   noopCheck: CheckFrequency
 }
 
+/* global globalThis */
 const ContextKey = Symbol.for(`react-redux-context`)
 const gT: {
   [ContextKey]?: Map<
     typeof React.createContext,
     Context<ReactReduxContextValue>
   >
-} = (typeof globalThis !== "undefined" ? globalThis : /* fall back to a per-module scope (pre-8.1 behaviour) if `globalThis` is not available */ {}) as any; 
+} = (
+  typeof globalThis !== 'undefined'
+    ? globalThis
+    : /* fall back to a per-module scope (pre-8.1 behaviour) if `globalThis` is not available */ {}
+) as any
 
 function getContext(): Context<ReactReduxContextValue> {
   if (!React.createContext) return {} as any

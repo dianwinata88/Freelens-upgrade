@@ -2,9 +2,9 @@ name: Tests
 
 on:
   push:
-    branches: [master, v9.0-integration]
+    branches: [main]
   pull_request:
-    branches: [master, v9.0-integration]
+    branches: [main]
   workflow_dispatch:
 
 jobs:

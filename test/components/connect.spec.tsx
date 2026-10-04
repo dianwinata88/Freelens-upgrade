@@ -2821,7 +2821,8 @@ describe('React', () => {
           return null
           //@ts-ignore before typescript4.0, a catch could not have type annotations
         } catch (error) {
-          return error.message
+          // `error` is `unknown` when useUnknownInCatchVariables is on (TS >= 4.4)
+          return (error as Error).message
         } finally {
           spy.mockRestore()
         }
